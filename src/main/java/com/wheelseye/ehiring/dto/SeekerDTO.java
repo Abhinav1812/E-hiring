@@ -18,7 +18,7 @@ import javax.persistence.OneToOne;
 @Data
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class SeekerDTO {
-    private Integer userId;
+    private Integer seekerId;
     private Integer exp ;
     private String link;
     private String profile;

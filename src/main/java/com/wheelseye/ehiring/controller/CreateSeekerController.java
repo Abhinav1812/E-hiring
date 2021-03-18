@@ -17,7 +17,7 @@ public class CreateSeekerController {
     private SeekerService seekerService;
 
     @PostMapping("/seekerinfo")
-    private SeekerDTO create(@RequestBody CreateSeekerReq req) throws Exception{
+    public SeekerDTO create(@RequestBody CreateSeekerReq req) throws Exception{
         return seekerService.create(req);
     }
 

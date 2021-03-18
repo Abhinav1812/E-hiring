@@ -9,4 +9,6 @@ import org.springframework.stereotype.Repository;
 public interface SkillsRepo extends JpaRepository<Skills,Integer> {
     @Query("SELECT S from Skills S where S.skillName =?1")
     Skills getIdBySkillName(String skillname);
+
+
 }

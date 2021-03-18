@@ -9,7 +9,7 @@ public class RecruiterConverter {
         RecruiterDTO recruiterDTO = new RecruiterDTO();
         recruiterDTO.setCompany(recruiter.getCompany());
         recruiterDTO.setYoe(recruiter.getYoe());
-        recruiterDTO.setUserId(recruiter.getId());
+        recruiterDTO.setRecId(recruiter.getId());
 
         return  recruiterDTO;
     }

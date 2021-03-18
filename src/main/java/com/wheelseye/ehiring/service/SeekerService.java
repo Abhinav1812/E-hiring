@@ -101,22 +101,26 @@ public class SeekerService {
     }
 
 
-    public String addSkillForSeeker(String skillname , Integer seekerid){
-        Skills skill= skillsRepo.getIdBySkillName(skillname);
-        if(skill==null)
+    public String addSkillForSeeker(Integer skillid , Integer seekerid){
+        Optional<Skills> skill= skillsRepo.findById(skillid);
+        if(!skill.isPresent())
             return "skill is not available";
         else{
             SkillsMap skillsMap = new SkillsMap();
             skillsMap.setEntityType(EntityTypeEnum2.SEEK);
             skillsMap.setEntityId(seekerid);
-            skillsMap.setSkills(skill);
+            skillsMap.setSkills(skill.get());
             skillMapedRepo.save(skillsMap);
             return "skill addded for user";
         }
     }
-    public SeekerDTO getSeekerDetails(Integer id){
-        Seeker seeker = seekerRepo.getSeekerByUserId(id);
-        return SeekerConverter.converter(seeker);
+    public SeekerDTO getSeekerDetails(Integer id) throws Exception{
+
+        Seeker seeker = seekerRepo.findByUserId(id);
+        if (seeker==null)
+            throw new Exception("seeker doesnt exist");
+        else
+            return SeekerConverter.converter(seeker);
     }
 
 

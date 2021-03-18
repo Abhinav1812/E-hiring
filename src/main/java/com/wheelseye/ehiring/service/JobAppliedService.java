@@ -1,9 +1,11 @@
 package com.wheelseye.ehiring.service;
 
 import com.wheelseye.ehiring.converter.JobAppliedConverter;
+import com.wheelseye.ehiring.converter.SeekerConverter;
 import com.wheelseye.ehiring.dto.JobAppliedDTO;
 import com.wheelseye.ehiring.dto.JobOpeningsDTO;
 import com.wheelseye.ehiring.dto.PageDTO;
+import com.wheelseye.ehiring.dto.SeekerDTO;
 import com.wheelseye.ehiring.entity.JobApplied;
 import com.wheelseye.ehiring.entity.JobOpenings;
 import com.wheelseye.ehiring.entity.Seeker;
@@ -18,10 +20,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class JobAppliedService {
@@ -59,5 +58,26 @@ public class JobAppliedService {
             jobAppliedDTOS.add(JobAppliedConverter.converter(jobApplied));
         }
         return new PageDTO<JobAppliedDTO>(pageable.getPageNumber(),pageable.getPageSize(), (Long) jobApplieds.getTotalElements(),jobAppliedDTOS);
+    }
+
+    public PageDTO<SeekerDTO> findAllSeekerForJob(Integer jobid,Integer pageNo,Integer pageSize){
+
+        Pageable pageable = PageRequest.of(pageNo,pageSize);
+
+        Page<JobApplied> jobApplieds = jobAppliedRepo.findSeekersByJobId(jobid,pageable);
+        List<Seeker> seekers = new ArrayList<>();
+
+        for (JobApplied jobApplied : jobApplieds) {
+            seekers.add(jobApplied.getSeekerId());
+        }
+
+        List<SeekerDTO> seekerDTOS = new ArrayList<>();
+
+        for (Seeker seeker : seekers) {
+            seekerDTOS.add(SeekerConverter.converter(seeker));
+        }
+
+        //return seekerDTOS;
+        return new PageDTO<SeekerDTO>(pageable.getPageNumber(),pageable.getPageSize(), (Long) jobApplieds.getTotalElements(),seekerDTOS);
     }
 }

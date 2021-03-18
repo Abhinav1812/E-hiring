@@ -27,12 +27,12 @@ public class EntityDetailsController {
     private RecruiterService recruiterService;
 
     @GetMapping("/seekers")
-    private PageDTO<SeekerDTO > getAllSeeker(@RequestParam(defaultValue = "0") Integer pageNo, @RequestParam(defaultValue = "2") Integer pageSize){
+    public PageDTO<SeekerDTO > getAllSeeker(@RequestParam(defaultValue = "0") Integer pageNo, @RequestParam(defaultValue = "2") Integer pageSize){
         return seekerService.getAllSeeker(pageNo,pageSize);
     }
 
     @GetMapping("/recruiters")
-    private PageDTO<RecruiterDTO> getAllRecruiter(@RequestParam(defaultValue = "0") Integer pageNo, @RequestParam(defaultValue = "2") Integer pageSize){
+    public PageDTO<RecruiterDTO> getAllRecruiter(@RequestParam(defaultValue = "0") Integer pageNo, @RequestParam(defaultValue = "2") Integer pageSize){
         return recruiterService.getAllRecruiter(pageNo,pageSize);
     }
 

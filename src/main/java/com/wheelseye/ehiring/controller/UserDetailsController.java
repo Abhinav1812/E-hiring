@@ -20,14 +20,6 @@ import java.util.List;
 
 public class UserDetailsController {
 
-    /*
-    @GetMapping("/users/{id}/profile")
-
-    public String userProfile(@PathVariable(value = "id") Integer userId){
-        return "chalja";
-    }
-
-     */
 
     @Autowired
     private UserService userService;
@@ -35,16 +27,10 @@ public class UserDetailsController {
     @Autowired
     private UserAuthenticationService userAuthenticationService;
 
-    /*
-    @GetMapping("")
-    public List<Seeker> getAllSeeker(){
-        return userService.getAllSeeker();
-    }
-    */
 
     // get all user api
     @GetMapping("/user")
-    private PageDTO<User> getAllUser(@RequestParam(defaultValue = "0")Integer pageNo,
+    public PageDTO<User> getAllUser(@RequestParam(defaultValue = "0")Integer pageNo,
                                      @RequestParam(defaultValue = "2") Integer pageSize){
         return userService.getAllUser(pageNo,pageSize);
     }
@@ -52,16 +38,16 @@ public class UserDetailsController {
     // user sign up api
 
     @PostMapping("/userSignup")
-    private User create(@RequestBody CreateUserReq req){
+    public User create(@RequestBody CreateUserReq req) throws  Exception{
         return userService.create(req);
     }
 
 
     // user sign in api
     @GetMapping("/userSignin")
-    private String getUserDetails(@RequestBody UserSigninReq userSigninReq) throws Exception{
+    public User getUserDetails(@RequestBody UserSigninReq userSigninReq) throws Exception{
         if(userAuthenticationService.getUserByDetails(userSigninReq)!=null)
-            return "SignInSuccessfully";
+            return userAuthenticationService.getUserByDetails(userSigninReq);
         else
             throw new Exception("User Authentication Failed");
     }
@@ -69,14 +55,14 @@ public class UserDetailsController {
     // get user details by id
 
     @GetMapping("/userdetails/{userid}")
-    private User userdetails(@PathVariable(value = "userid") Integer userid) {
+    public User userdetails(@PathVariable(value = "userid") Integer userid) {
         return userService.getUserById(userid);
     }
 
 
     //Update password of user
     @PutMapping("/user/{userid}/password")
-    private UserAccount updateUserPassword(@PathVariable(value = "userid" ) Integer userid, @RequestBody ChangePasswordReq changePasswordReq) throws Exception{
+    public UserAccount updateUserPassword(@PathVariable(value = "userid" ) Integer userid, @RequestBody ChangePasswordReq changePasswordReq) throws Exception{
         return userService.updatePassword(userid, changePasswordReq);
     }
 

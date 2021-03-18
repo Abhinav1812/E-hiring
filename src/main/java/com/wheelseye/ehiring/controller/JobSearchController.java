@@ -19,19 +19,19 @@ public class JobSearchController {
 
 
     @GetMapping("/alljobs")
-    private PageDTO<JobOpeningsDTO> getAllJobs(@RequestParam(defaultValue = "0") Integer pageNo,@RequestParam(defaultValue = "2") Integer pageSize){
+    public PageDTO<JobOpeningsDTO> getAllJobs(@RequestParam(defaultValue = "0") Integer pageNo,@RequestParam(defaultValue = "2") Integer pageSize){
         return jobOpeningsService.getAllJobs(pageNo,pageSize);
     }
 
     @GetMapping("/searchjobprof/{profile}")
-    private PageDTO<JobOpeningsDTO> searchAllJobsWithProfile(@RequestParam(defaultValue = "0") Integer pageNo , @RequestParam(defaultValue = "3")
+    public PageDTO<JobOpeningsDTO> searchAllJobsWithProfile(@RequestParam(defaultValue = "0") Integer pageNo , @RequestParam(defaultValue = "3")
             Integer pageSize,@PathVariable(value = "profile") String profile){
         return jobOpeningsService.getAllJobsAvailableByProfile(profile,pageNo,pageSize);
     }
 
 
     @GetMapping("/searchjobskills")
-    private PageDTO<JobOpeningsDTO> searchAllJobsWithSkills(@RequestParam(defaultValue = "0") Integer pageNo , @RequestParam(defaultValue = "2")
+    public PageDTO<JobOpeningsDTO> searchAllJobsWithSkills(@RequestParam(defaultValue = "0") Integer pageNo , @RequestParam(defaultValue = "2")
             Integer pageSize,@RequestParam(value = "skillids") List<Integer> skillIds) {
         return jobOpeningsService.getAllJobsAvailableBySkills(skillIds,pageNo,pageSize) ;
     }

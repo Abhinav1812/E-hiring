@@ -46,21 +46,29 @@ public class UserService {
     }
 
 
-    public User create(CreateUserReq req){
-        User user = new User();
-        UserAccount userAccount = new UserAccount();
-        user.setName(req.getName());
-        user.setEmailId(req.getEmail_id());
-        //user.setPassword(req.getPassword());
-        user = userRepo.save(user);
+    public User create(CreateUserReq req) throws  Exception{
+        User user = userRepo.findByEmailId(req.getEmail_id());
+        if(user==null) {
+            user = new User();
 
-        //userAccount.setName(req.getName());
-        //userAccount.setEmailid(req.getEmail_id());
-        userAccount.setPassword(req.getPassword());
-        userAccount.setType(req.getType());
-        userAccount.setUser(user);
-        userAccountRepo.save(userAccount);
+            user.setName(req.getName());
+            user.setEmailId(req.getEmail_id());
+            //user.setPassword(req.getPassword());
+            user = userRepo.save(user);
+        }
 
+        UserAccount userAccount  = userAccountRepo.findByUserAndType(user,req.getType());
+        if(userAccount==null) {
+            userAccount = new UserAccount();
+            if(!req.getPassword().matches("^[a-zA-Z0-9]*$"))
+                throw new Exception("Password should only include alphabets,numerals or special characters only");
+            userAccount.setPassword(req.getPassword());
+            userAccount.setType(req.getType());
+            userAccount.setUser(user);
+            userAccountRepo.save(userAccount);
+        }
+        else
+            throw new Exception("User Account Already Exists");
         return user;
 
     }
@@ -72,6 +80,8 @@ public class UserService {
     public UserAccount updatePassword(Integer id, ChangePasswordReq changePasswordReq) throws Exception {
         User user = userRepo.findById(id).orElse(null);
         UserAccount userAccount = userAccountRepo.findByUser(user);
+        if(!(changePasswordReq.getNewPassword().matches("^[a-zA-Z0-9]*$")))
+            throw new Exception("Password should only include alphabets,numerals or special characters only");
         if(!(userAccount.getPassword().equals(changePasswordReq.getOldPassword()))){
             throw new Exception("Incorrect Old Password");
         }

@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-
 public class SeekerHomePageController {
 
     @Autowired
@@ -29,13 +28,13 @@ public class SeekerHomePageController {
 
 
     @GetMapping("/jobsapplied/{userid}")
-    private PageDTO<JobAppliedDTO> allJobsApplied(@RequestParam(defaultValue = "0") Integer pageNo , @RequestParam(defaultValue = "3")
+    public PageDTO<JobAppliedDTO> allJobsApplied(@RequestParam(defaultValue = "0") Integer pageNo , @RequestParam(defaultValue = "3")
             Integer pageSize,@PathVariable(value = "userid") Integer userid){
         return jobAppliedService.getJobsAppliedByUser(userid,pageNo,pageSize);
     }
 
     @PostMapping("/applyforjob")
-    private String applyForJob(@RequestBody ApplyJobByUserReq applyJobByUserReq){
+    public String applyForJob(@RequestBody ApplyJobByUserReq applyJobByUserReq){
         if(jobAppliedService.applyforJob(applyJobByUserReq).equals("Successfully"))
             return "Application Successfully Submitted";
         else
@@ -43,18 +42,18 @@ public class SeekerHomePageController {
     }
 
     @GetMapping("/jobsavailable/{userid}")
-    private List<JobOpeningsDTO> allJobsAvailable(@PathVariable(value = "userid") Integer userid){
+    public List<JobOpeningsDTO> allJobsAvailable(@PathVariable(value = "userid") Integer userid){
         return seekerService.getJobsAvailableForUser(userid);
     }
 
     @GetMapping("/seekerdetails/{userid}")
-    private SeekerDTO seekerDetails(@PathVariable(value = "userid") Integer userid){
+    public SeekerDTO seekerDetails(@PathVariable(value = "userid") Integer userid) throws Exception {
         return seekerService.getSeekerDetails(userid);
     }
 
     //update seeker details
     @PutMapping("/updateSeekerDetails/{userid}")
-    private SeekerDTO updateSDetails(@PathVariable(value = "userid") Integer userid, @RequestBody ChangeSeekerDetailsReq changeSeekerDetailsReq) throws Exception{
+    public SeekerDTO updateSDetails(@PathVariable(value = "userid") Integer userid, @RequestBody ChangeSeekerDetailsReq changeSeekerDetailsReq) throws Exception{
         return seekerService.updateSeekerDetails(userid,changeSeekerDetailsReq);
     }
 

@@ -32,6 +32,13 @@ public class JobOpeningsService {
     @Autowired
     private SkillMapedRepo skillMapedRepo;
 
+    public JobOpeningsDTO updateJobStatus(Integer recid, Integer jobid){
+        JobOpenings jobOpenings = jobOpeningsRepo.getJobByjobid(jobid);
+        if(jobOpenings.getRecruiters().getId()==recid)
+            jobOpenings.setStatus("closed");
+        jobOpeningsRepo.save(jobOpenings);
+        return JobOpeningsConverter.converter(jobOpenings);
+    }
     public JobOpenings create(AddJobReq req){
 
         Optional<Recruiter> recruiter = recruiterRepo.findById(req.getRecId());

@@ -19,14 +19,14 @@ public class UserAuthenticationService {
     @Autowired
     private UserRepo userRepo;
 
-    public UserAccount getUserByDetails(UserSigninReq userSigninReq) throws Exception{
+    public User getUserByDetails(UserSigninReq userSigninReq) throws Exception{
         User user =  userRepo.findByEmailId(userSigninReq.getEmailId());
         //UserAccount userAccount = userAccountRepo.findByEmailId(userSigninReq.getEmailId());
 
         if(user!=null){
             UserAccount userAccount = userAccountRepo.findByUser(user);
             if(userAccount.getPassword().equals(userSigninReq.getPassword()) && userAccount.getType()==userSigninReq.getUserType())
-                return userAccount;
+                return user;
             throw new Exception("Incorrect Details");
         }
         throw new Exception("user doesnt exist");

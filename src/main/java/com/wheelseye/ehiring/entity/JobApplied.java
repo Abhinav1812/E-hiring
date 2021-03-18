@@ -37,4 +37,6 @@ public class JobApplied implements Serializable {
 
     @Column(name = "appliedon")
     private Date appliedOn;
+
+
 }

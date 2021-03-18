@@ -14,7 +14,7 @@ import lombok.experimental.Accessors;
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 
 public class RecruiterDTO {
-    private Integer userId;
+    private Integer recId;
     private String company;
     private Integer yoe;
 }

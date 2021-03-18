@@ -17,7 +17,8 @@ public class CreateRecruiterController {
     private RecruiterService recruiterService;
 
     @PostMapping("/recruiterinfo")
-    private RecruiterDTO create(@RequestBody CreateRecruiterReq req){
+    public RecruiterDTO create(@RequestBody CreateRecruiterReq req) throws Exception{
         return recruiterService.create(req);
     }
+
 }

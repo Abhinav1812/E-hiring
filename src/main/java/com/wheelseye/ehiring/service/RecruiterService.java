@@ -57,28 +57,26 @@ public class RecruiterService {
         return seekerRepo.findAll();
     }
     */
-    public RecruiterDTO create(CreateRecruiterReq req){
+    public RecruiterDTO create(CreateRecruiterReq req) throws Exception{
 
         Optional<User> optionalUser = userRepo.findById((req.getUserId()));
         if(optionalUser.isPresent()){
             User user = optionalUser.get();
-            UserAccount userAccount = userAccountRepo.findByUser(user);
+            UserAccount userAccount = userAccountRepo.findByUserAndType(user,EntityTypeEnum1.RECRUITER);
             if(null!=userAccount){
-                if(userAccount.getType() == EntityTypeEnum1.RECRUITER){
+
                     Recruiter recruiter = new Recruiter();
                     recruiter.setUser(user);
                     recruiter.setYoe(req.getYoe());
                     recruiter.setCompany(req.getCompany());
                     return RecruiterConverter.converter(recruiterRepo.save(recruiter));
-                }
-                else
-                    return null;
+
             }
             else
-                return null;
+                throw  new Exception("User is already a recruiter");
         }
         else
-            return null;
+            throw new Exception("user doesnt exist");
     }
 
     public RecruiterDTO getRecruiterDetails(Integer id){
@@ -90,15 +88,16 @@ public class RecruiterService {
     // update recruiter details
 
 
-    public String addSkillForJob(String skillname, Integer jobid){
-        Skills skill= skillsRepo.getIdBySkillName(skillname);
-        if(skill==null)
-            return "skill is not available";
+    public String addSkillForJob(Integer skillid, Integer jobid){
+        Optional<Skills> skill= skillsRepo.findById(skillid);
+
+        if(!skill.isPresent())
+            return "skill or job is not available";
         else{
             SkillsMap skillsMap = new SkillsMap();
             skillsMap.setEntityType(EntityTypeEnum2.JOB);
             skillsMap.setEntityId(jobid);
-            skillsMap.setSkills(skill);
+            skillsMap.setSkills(skill.get());
             skillMapedRepo.save(skillsMap);
             return "skill addded for job";
         }

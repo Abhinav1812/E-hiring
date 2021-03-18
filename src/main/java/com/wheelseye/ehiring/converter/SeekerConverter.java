@@ -10,7 +10,7 @@ public class SeekerConverter {
         seekerDTO.setExp(seeker.getExp());
         seekerDTO.setLink(seeker.getLink());
         seekerDTO.setProfile(seeker.getProfile());
-        seekerDTO.setUserId(seeker.getId());
+        seekerDTO.setSeekerId(seeker.getId());
         return seekerDTO;
     }
 }

@@ -17,17 +17,17 @@ public class SkillAddingController {
     private RecruiterService recruiterService;
 
 
-    @PostMapping("/addskillseeker/{seekerid}/{skillname}")
-    private String addSkills(@PathVariable(value = "skillname")String skillname, @PathVariable(value = "seekerid") Integer seekerid) throws Exception{
-        if(!(seekerService.addSkillForSeeker(skillname, seekerid).equals("skill is not available")))
+    @PostMapping("/addskillseeker/{seekerid}/{skillid}")
+    public String addSkills(@PathVariable(value = "seekerid") Integer seekerid,@PathVariable(value = "skillid")Integer skillid) throws Exception{
+        if(!(seekerService.addSkillForSeeker(skillid, seekerid).equals("skill is not available")))
             return "Skill Added to user";
         else
-            return "Cant Add Skill";
+            return "Cant Add Skill either the seeker or skill doesnt exist";
     }
 
-    @PostMapping("/addskilljob/{jobid}/{skillname}")
-    private String addSkillsToJob(@PathVariable(value = "skillname")String skillname, @PathVariable(value = "jobid") Integer jobid){
-        if(recruiterService.addSkillForJob(skillname, jobid).equals("skill is not available"))
+    @PostMapping("/addskilljob/{jobid}/{skillid}")
+    public String addSkillsToJob(@PathVariable(value = "skillid")Integer skillid, @PathVariable(value = "jobid") Integer jobid){
+        if(recruiterService.addSkillForJob(skillid, jobid).equals("skill is not available"))
             return "skill is not available";
         else
             return "skill added to job";
