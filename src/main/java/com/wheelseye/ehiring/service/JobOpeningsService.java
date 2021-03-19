@@ -39,7 +39,7 @@ public class JobOpeningsService {
         jobOpeningsRepo.save(jobOpenings);
         return JobOpeningsConverter.converter(jobOpenings);
     }
-    public JobOpenings create(AddJobReq req){
+    public JobOpeningsDTO create(AddJobReq req){
 
         Optional<Recruiter> recruiter = recruiterRepo.findById(req.getRecId());
         Recruiter recruiter1 = recruiter.get();
@@ -50,7 +50,8 @@ public class JobOpeningsService {
         jobOpenings.setProfile(req.getProfile());
         jobOpenings.setStatus(req.getStatus());
         jobOpenings.setCreatedAt(new Date());
-        return jobOpeningsRepo.save(jobOpenings);
+        jobOpeningsRepo.save(jobOpenings);
+        return JobOpeningsConverter.converter(jobOpenings);
     }
 
     public PageDTO<JobOpeningsDTO> getAllJobs(Integer pageNo,Integer pageSize){
@@ -98,6 +99,20 @@ public class JobOpeningsService {
 
         Pageable pageable = PageRequest.of(pageNo,pageSize);
         Set<Integer> jobsId = skillMapedRepo.getAllJobIdBySkillIds(skillIds);
+
+        Page<JobOpenings> jobOpenings = jobOpeningsRepo.getAllJobsAvailableByJobIds(jobsId,pageable);
+        List<JobOpeningsDTO> jobOpeningsDTOS= new ArrayList<>();
+        for (JobOpenings jobOpening : jobOpenings) {
+            jobOpeningsDTOS.add(JobOpeningsConverter.converter(jobOpening));
+        }
+
+        return new PageDTO<JobOpeningsDTO>(pageable.getPageNumber(),pageable.getPageSize(),(Long) jobOpenings.getTotalElements(),jobOpeningsDTOS);
+    }
+
+    public PageDTO<JobOpeningsDTO> getAllJobsByProfandSkills(List<Integer> skillIds, String profile , Integer pageNo, Integer pageSize){
+        Pageable pageable = PageRequest.of(pageNo,pageSize);
+        Set<Integer> jobsId = skillMapedRepo.getAllJobIdBySkillIds(skillIds);
+        jobsId.addAll(jobOpeningsRepo.findJobIdByProfile(profile));
 
         Page<JobOpenings> jobOpenings = jobOpeningsRepo.getAllJobsAvailableByJobIds(jobsId,pageable);
         List<JobOpeningsDTO> jobOpeningsDTOS= new ArrayList<>();

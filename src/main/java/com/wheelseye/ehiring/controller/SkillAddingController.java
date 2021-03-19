@@ -17,6 +17,7 @@ public class SkillAddingController {
     private RecruiterService recruiterService;
 
 
+    // add skill for user by skill id
     @PostMapping("/addskillseeker/{seekerid}/{skillid}")
     public String addSkills(@PathVariable(value = "seekerid") Integer seekerid,@PathVariable(value = "skillid")Integer skillid) throws Exception{
         if(!(seekerService.addSkillForSeeker(skillid, seekerid).equals("skill is not available")))
@@ -25,6 +26,7 @@ public class SkillAddingController {
             return "Cant Add Skill either the seeker or skill doesnt exist";
     }
 
+    //add skill for job by skill id
     @PostMapping("/addskilljob/{jobid}/{skillid}")
     public String addSkillsToJob(@PathVariable(value = "skillid")Integer skillid, @PathVariable(value = "jobid") Integer jobid){
         if(recruiterService.addSkillForJob(skillid, jobid).equals("skill is not available"))

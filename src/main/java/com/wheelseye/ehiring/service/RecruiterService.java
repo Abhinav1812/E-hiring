@@ -114,5 +114,4 @@ public class RecruiterService {
 
         return RecruiterConverter.converter(recruiterRepo.save(recruiter));
     }
-
 }

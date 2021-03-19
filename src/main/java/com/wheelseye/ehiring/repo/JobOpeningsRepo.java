@@ -11,15 +11,23 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public interface JobOpeningsRepo extends JpaRepository<JobOpenings,Integer> {
     @Query("select J from JobOpenings J where J.recruiters = ?1 order by J.createdAt")
     Page<JobOpenings> findJobsByRecId(Optional<Recruiter> recruiter, Pageable pageable);
 
 
+    //Collection<JobOpenings> findByProfile(String profile);
+
+    @Query("SELECT J.id from JobOpenings J where J.profile = ?1")
+    List<Integer> findJobIdByProfile(String profile);
+
     @Query("SELECT J from JobOpenings J where J.id = ?1 order by J.createdAt")
     List<JobOpenings> getAllJobsAvailableByJobId(Integer id);
-    
+
+    Page<JobOpenings> findByIdIn(Collection<Integer> ids,Pageable pageable);
+
 
     @Query("SELECT J from JobOpenings J where  J.profile = ?1 order by J.createdAt")
     Page<JobOpenings> getAllJobsAvailableByProfile(String profile, Pageable pageable);

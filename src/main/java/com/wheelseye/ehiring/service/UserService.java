@@ -60,8 +60,8 @@ public class UserService {
         UserAccount userAccount  = userAccountRepo.findByUserAndType(user,req.getType());
         if(userAccount==null) {
             userAccount = new UserAccount();
-            if(!req.getPassword().matches("^[a-zA-Z0-9]*$"))
-                throw new Exception("Password should only include alphabets,numerals or special characters only");
+           // if(!(req.getPassword().matches("^[a-zA-Z0-9]")))
+            //    throw new Exception("Password should only include alphabets,numerals or special characters only");
             userAccount.setPassword(req.getPassword());
             userAccount.setType(req.getType());
             userAccount.setUser(user);
@@ -80,8 +80,8 @@ public class UserService {
     public UserAccount updatePassword(Integer id, ChangePasswordReq changePasswordReq) throws Exception {
         User user = userRepo.findById(id).orElse(null);
         UserAccount userAccount = userAccountRepo.findByUser(user);
-        if(!(changePasswordReq.getNewPassword().matches("^[a-zA-Z0-9]*$")))
-            throw new Exception("Password should only include alphabets,numerals or special characters only");
+       // if(!(changePasswordReq.getNewPassword().matches("^[a-zA-Z0-9]*$")))
+        //    throw new Exception("Password should only include alphabets,numerals or special characters only");
         if(!(userAccount.getPassword().equals(changePasswordReq.getOldPassword()))){
             throw new Exception("Incorrect Old Password");
         }

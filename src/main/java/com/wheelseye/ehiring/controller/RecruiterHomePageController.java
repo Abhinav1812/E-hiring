@@ -28,20 +28,24 @@ public class RecruiterHomePageController {
     @Autowired
     private JobAppliedService jobAppliedService;
 
+    // get all job posted by a recruiter
+
     @GetMapping("/jobsposted/{recid}")
     public PageDTO<JobOpeningsDTO> AllJobsPosted(@PathVariable(value = "recid") Integer recid , @RequestParam(defaultValue = "0") Integer pageNo,
     @RequestParam(defaultValue = "2") Integer pageSize){
         return jobOpeningsService.getAllJobsPostedByRec(recid,pageNo,pageSize);
     }
 
+    // addjob to job openings
     @PostMapping("/addjob")
-    public String create(@RequestBody AddJobReq req){
+    public JobOpeningsDTO create(@RequestBody AddJobReq req) throws  Exception{
         if(jobOpeningsService.create(req)!=null)
-            return "Job Created";
+            return jobOpeningsService.create(req);
         else
-            return "Job cant be Created";
+            throw new Exception("Job cant be created");
     }
-    // get recruiter details
+
+    // get all the seeker that applied for a job
 
     @GetMapping("/AllSeekerForJob/{jobid}")
     public PageDTO<SeekerDTO> AllSeekerForJob(@PathVariable(value = "jobid") Integer jobid, @RequestParam(defaultValue = "0") Integer pageNo,
@@ -49,16 +53,22 @@ public class RecruiterHomePageController {
         return jobAppliedService.findAllSeekerForJob(jobid,pageNo,pageSize);
     }
 
+    //get all recruiter details by user id
+
     @GetMapping("/recdetails/{userid}")
     public RecruiterDTO recruiterDetails(@PathVariable(value = "userid") Integer userid){
         return recruiterService.getRecruiterDetails(userid);
     }
+
+    // update job status posted by recruiter
 
     @PutMapping("/changeJobStatus/{recid}/{jobid}")
     public JobOpeningsDTO changeJobStatus(@PathVariable(value = "recid") Integer recid,
                                           @PathVariable(value = "jobid") Integer jobid) throws Exception{
         return jobOpeningsService.updateJobStatus(recid,jobid);
     }
+
+    // update recruiter details
 
     @PutMapping("/updateRecDetails/{userid}")
     public RecruiterDTO updateRDetails(@PathVariable(value = "userid") Integer userid, @RequestBody ChangeRecruiterDetailsReq changeRecruiterDetailsReq) throws Exception{

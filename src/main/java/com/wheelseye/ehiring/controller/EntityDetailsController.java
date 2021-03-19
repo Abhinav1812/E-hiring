@@ -26,11 +26,13 @@ public class EntityDetailsController {
     @Autowired
     private RecruiterService recruiterService;
 
+    // get all seekers available
     @GetMapping("/seekers")
     public PageDTO<SeekerDTO > getAllSeeker(@RequestParam(defaultValue = "0") Integer pageNo, @RequestParam(defaultValue = "2") Integer pageSize){
         return seekerService.getAllSeeker(pageNo,pageSize);
     }
 
+    //get all recruiters available
     @GetMapping("/recruiters")
     public PageDTO<RecruiterDTO> getAllRecruiter(@RequestParam(defaultValue = "0") Integer pageNo, @RequestParam(defaultValue = "2") Integer pageSize){
         return recruiterService.getAllRecruiter(pageNo,pageSize);

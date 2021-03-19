@@ -44,6 +44,7 @@ public class SeekerService {
     private SkillsRepo skillsRepo;
 
     public PageDTO<SeekerDTO> getAllSeeker(Integer pageNo,Integer pageSize){
+
         Pageable pageable = PageRequest.of(pageNo,pageSize);
         Page<Seeker> seekers = seekerRepo.findAll(pageable);
         List<SeekerDTO> seekerDTOS = new ArrayList<>();
@@ -80,16 +81,16 @@ public class SeekerService {
 
     //get all jobs available for user
 
-    public List<JobOpeningsDTO> getJobsAvailableForUser(Integer id){
-        List<JobOpenings> jobOpeningsavailable = new ArrayList<>();
+    public PageDTO<JobOpeningsDTO> getJobsAvailableForUser(Integer id){
 
-        Set<Integer> skillIds = skillMapedRepo.getSkillIdsByUserId(id);
+        Pageable pageable = PageRequest.of(0,2);
+
+
+        Seeker seeker = seekerRepo.getSeekerByUserId(id);
+        Set<Integer> skillIds = skillMapedRepo.getSkillIdsByUserId(seeker.getId());
         Set<Integer> jobIds = skillMapedRepo.getAllJobIdBySkillIds(skillIds);
 
-
-        for (Integer jobId : jobIds) {
-            jobOpeningsavailable.addAll(jobOpeningsRepo.getAllJobsAvailableByJobId(jobId));
-        }
+        Page<JobOpenings> jobOpeningsavailable= jobOpeningsRepo.findByIdIn(jobIds,pageable);
 
 
         List<JobOpeningsDTO> jobOpeningsDTOS= new ArrayList<>();
@@ -97,7 +98,20 @@ public class SeekerService {
             jobOpeningsDTOS.add(JobOpeningsConverter.converter(jobOpenings));
         }
 
-        return jobOpeningsDTOS;
+        return new PageDTO<JobOpeningsDTO>(pageable.getPageNumber(),pageable.getPageSize(),(Long) jobOpeningsavailable.getTotalElements(),jobOpeningsDTOS);
+
+        /*
+        Seeker seeker = seekerRepo.getSeekerByUserId(id);
+        Pageable pageable = PageRequest.of(0,2);
+        Page<JobOpenings> jobOpenings = jobOpeningsRepo.getAllJobsAvailableByProfile(seeker.getProfile(),pageable);
+
+        List<JobOpeningsDTO> jobOpeningsDTOS = new ArrayList<>();
+        for (JobOpenings jobOpening : jobOpenings) {
+            jobOpeningsDTOS.add(JobOpeningsConverter.converter(jobOpening));
+        }
+
+        return new PageDTO<JobOpeningsDTO>(pageable.getPageNumber(),pageable.getPageSize(),(Long) jobOpenings.getTotalElements(),jobOpeningsDTOS);
+        */
     }
 
 

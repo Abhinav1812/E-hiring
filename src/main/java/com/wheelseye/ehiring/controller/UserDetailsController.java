@@ -66,5 +66,4 @@ public class UserDetailsController {
         return userService.updatePassword(userid, changePasswordReq);
     }
 
-
 }

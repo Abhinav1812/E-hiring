@@ -38,6 +38,9 @@ public class JobAppliedService {
     public String applyforJob(ApplyJobByUserReq applyJobByUserReq){
         Seeker seeker = seekerRepo.findByUserId(applyJobByUserReq.getUserId());
         JobOpenings jobOpenings = jobOpeningsRepo.getJobByjobid(applyJobByUserReq.getJobId());
+        if(jobOpenings==null || seeker==null)
+            return "Unsuccessfull";
+
         JobApplied jobApplied = new JobApplied();
         jobApplied.setSeekerId(seeker);
         jobApplied.setStatus("In progress");

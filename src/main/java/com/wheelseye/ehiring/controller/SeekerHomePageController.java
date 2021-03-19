@@ -27,12 +27,15 @@ public class SeekerHomePageController {
     private SeekerService seekerService;
 
 
+    //get all jobs applied by user
+
     @GetMapping("/jobsapplied/{userid}")
     public PageDTO<JobAppliedDTO> allJobsApplied(@RequestParam(defaultValue = "0") Integer pageNo , @RequestParam(defaultValue = "3")
             Integer pageSize,@PathVariable(value = "userid") Integer userid){
         return jobAppliedService.getJobsAppliedByUser(userid,pageNo,pageSize);
     }
 
+    // apply for a job
     @PostMapping("/applyforjob")
     public String applyForJob(@RequestBody ApplyJobByUserReq applyJobByUserReq){
         if(jobAppliedService.applyforJob(applyJobByUserReq).equals("Successfully"))
@@ -41,10 +44,13 @@ public class SeekerHomePageController {
             return "Application cant be submitted";
     }
 
+    //get all jobs available by user id
     @GetMapping("/jobsavailable/{userid}")
-    public List<JobOpeningsDTO> allJobsAvailable(@PathVariable(value = "userid") Integer userid){
+    public PageDTO<JobOpeningsDTO> allJobsAvailable(@PathVariable(value = "userid") Integer userid){
         return seekerService.getJobsAvailableForUser(userid);
     }
+
+    // get all seeker details by user id
 
     @GetMapping("/seekerdetails/{userid}")
     public SeekerDTO seekerDetails(@PathVariable(value = "userid") Integer userid) throws Exception {

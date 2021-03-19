@@ -16,6 +16,9 @@ public class CreateSeekerController {
     @Autowired
     private SeekerService seekerService;
 
+
+    // take seker details and add to database
+
     @PostMapping("/seekerinfo")
     public SeekerDTO create(@RequestBody CreateSeekerReq req) throws Exception{
         return seekerService.create(req);

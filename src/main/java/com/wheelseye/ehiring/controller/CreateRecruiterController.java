@@ -16,6 +16,7 @@ public class CreateRecruiterController {
     @Autowired
     private RecruiterService recruiterService;
 
+    // take recruiter info and add to database
     @PostMapping("/recruiterinfo")
     public RecruiterDTO create(@RequestBody CreateRecruiterReq req) throws Exception{
         return recruiterService.create(req);
